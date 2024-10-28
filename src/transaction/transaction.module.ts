@@ -4,7 +4,7 @@ import { TransactionController } from './transaction.controller';
 import { TransactionService } from './transaction.service';
 
 @Module({
-  imports: [ UserController ],
+  imports: [],
   controllers: [TransactionController],
   providers: [TransactionService],
 })
