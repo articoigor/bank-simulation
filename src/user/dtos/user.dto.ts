@@ -9,7 +9,7 @@ export class UserDto {
     @IsString({ message: 'O campo password é do tipo String.' })
     password: string;
 
-    constructor(username: string, password: string, birthdate: string){
+    constructor(username: string, password: string){
         this.username = username;
         this.password = password;
     }

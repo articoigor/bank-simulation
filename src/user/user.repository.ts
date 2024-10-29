@@ -1,9 +1,10 @@
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/user/entities/user.entity';
+import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { NewUserDto } from './dtos/newUser.dto';
+import { UserDto } from './dtos/user.dto';
 
 @Injectable()
 export class UserRepository {
@@ -12,7 +13,7 @@ export class UserRepository {
     private readonly client: Repository<UserEntity>,
   ) {}
     
-  async getUser(username: string): Promise<UserEntity> {
+  async getUserByName(username: string): Promise<UserEntity> {
     const query = `SELECT *
                    FROM Users u 
                    WHERE u.username = '${username}'`;
@@ -22,12 +23,30 @@ export class UserRepository {
     return ans[0];
   }
 
-  async insertUser(newUserDto: NewUserDto): Promise<UserEntity> {
-    const query = `INSERT INTO Users (username, password, birthdate, created_at)
-                        VALUES ('${newUserDto.username}', '${newUserDto.password}', '${newUserDto.birthdate}', '${Date.now()}')`;
+  async getUserById(id: string): Promise<UserEntity> {
+    const query = `SELECT *
+                   FROM Users u 
+                   WHERE u.id = '${id}'`;
 
     const ans = await this.client.query(query);
 
     return ans[0];
+  }
+
+  async insertUser(newUserDto: NewUserDto): Promise<UserEntity> {
+    const query = `INSERT INTO Users (username, password, birthdate, balance, created_at)
+                        VALUES ('${newUserDto.username}', '${newUserDto.password}', '${newUserDto.birthdate}', 100, '${Date.now()}')`;
+
+    const ans = await this.client.query(query);
+
+    return ans[0];
+  }
+
+  async updateUser(updatedUser: UserEntity): Promise<any> {
+    const query = `UPDATE Users
+                    SET balance = ${updatedUser.balance}
+                    WHERE id = ${updatedUser.id}`;
+
+    return this.client.query(query);
   }
 }

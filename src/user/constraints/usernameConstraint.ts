@@ -9,7 +9,7 @@ export class UserExistValidator implements ValidatorConstraintInterface {
   constructor(@Inject(UserRepository) private readonly usersRepository: UserRepository) {}
 
   async validate(text: string) {
-    const user = await this.usersRepository.getUser(text);
+    const user = await this.usersRepository.getUserByName(text);
     
     return !user;
   }

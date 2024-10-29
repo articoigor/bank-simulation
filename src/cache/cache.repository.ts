@@ -6,7 +6,7 @@ import Redis from "ioredis";
 export class RedisRepository {
     constructor(@Inject('REDIS_PROVIDER') private readonly redis: Redis) {}
     async saveData<T>(data: T, key: string): Promise<string> {
-        return this.redis.set(key, JSON.stringify(data), "EX", 180)
+        return this.redis.set(key, JSON.stringify(data), "EX", 60 * 60)
     }
 
     async getData<T>(key: string): Promise<T> {

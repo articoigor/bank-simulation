@@ -15,5 +15,8 @@ export class UserEntity {
   birthdate: string;
 
   @Column()
+  balance: number;
+
+  @Column()
   created_at: string;
 }

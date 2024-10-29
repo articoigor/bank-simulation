@@ -4,10 +4,11 @@ import { UserRepository } from './user.repository';
 import { RegisterNewUserResponse } from './dtos/registerNewUser.response';
 import * as bcrypt from 'bcrypt';
 import { UserDto } from './dtos/user.dto';
-import { UserEntity } from 'src/user/entities/user.entity';
-import { v4 as uuidv4 } from 'uuid';
+import { UserEntity } from 'src/entities/user.entity';
 import { RedisRepository } from 'src/cache/cache.repository';
 import { SignInResponse } from './dtos/signIn.response';
+import { TransactionDto } from './dtos/transaction.dto';
+import * as jwt from 'jsonwebtoken';
 
 
 @Injectable()
@@ -18,7 +19,7 @@ export class UserService {
   ) {}
   async registarNewUser(newUserDto: NewUserDto): Promise<RegisterNewUserResponse> {
     try{
-      const existingUser = await this.userRepository.getUser(newUserDto.username);
+      const existingUser = await this.userRepository.getUserByName(newUserDto.username);
 
       if(existingUser) throw new BadRequestException('Já existe um usuário com o nome informado.');
 
@@ -33,7 +34,7 @@ export class UserService {
   }
 
   async signIn(userDto: UserDto): Promise<SignInResponse> {
-    const user = await this.userRepository.getUser(userDto.username);
+    const user = await this.userRepository.getUserByName(userDto.username);
 
     const isValidLogin = await this.verifyLogin(user, userDto);
     
@@ -41,14 +42,39 @@ export class UserService {
       throw new UnauthorizedException("A senha e/ou usuários inseridos são inválidos");
     }
 
+    const validityInterval = new Date(new Date().getTime() + 60 * 60 * 1000).toISOString();
+
+    const bearerToken = this.generateBearerToken({
+      username: userDto.username,
+      validUntil: validityInterval
+    });
+
     const response = { 
-      token: uuidv4(),
-      expiresIn: new Date(new Date().getTime() + 30 * 60 * 1000).toISOString()
+      token: bearerToken,
+      expiresIn: validityInterval
     };
 
-    await this.cacheRepository.saveData(response, userDto.username);
+    await this.cacheRepository.saveData(bearerToken, userDto.username);
 
     return response;
+  }
+
+  async processTransaction(transactionDto: TransactionDto): Promise<any>{
+    const source = await this.userRepository.getUserById(transactionDto.fromId);
+
+    const target = await this.userRepository.getUserById(transactionDto.toId);
+
+    source.balance -= transactionDto.amount;
+
+    if(source.balance < 0) throw new BadRequestException('Não há saldo suficiente na conta origem para realizar a transação.');
+
+    target.balance += transactionDto.amount;
+
+    await this.userRepository.updateUser(source);
+    
+    await this.userRepository.updateUser(target);
+
+    return null;
   }
 
   private encryptPassword(password: string): Promise<string> {
@@ -63,5 +89,9 @@ export class UserService {
     const isValidUser = req.username === entity.username;
 
     return isValidPassword && isValidUser;
+  }
+
+  private generateBearerToken(payload: object): string {
+    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
   }
 }
