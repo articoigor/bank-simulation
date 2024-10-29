@@ -1,9 +1,9 @@
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { UserDto } from './dtos/user.dto';
+import { NewUserDto } from './dtos/newUser.dto';
 
 @Injectable()
 export class UserRepository {
@@ -12,19 +12,19 @@ export class UserRepository {
     private readonly client: Repository<UserEntity>,
   ) {}
     
-  async getUser(userDto: UserDto): Promise<UserEntity> {
+  async getUser(username: string): Promise<UserEntity> {
     const query = `SELECT *
                    FROM Users u 
-                   WHERE u.username = '${userDto.username}'`;
+                   WHERE u.username = '${username}'`;
 
     const ans = await this.client.query(query);
 
     return ans[0];
   }
 
-  async insertUser(userDto: UserDto): Promise<UserEntity> {
+  async insertUser(newUserDto: NewUserDto): Promise<UserEntity> {
     const query = `INSERT INTO Users (username, password, birthdate, created_at)
-                        VALUES ('${userDto.username}', '${userDto.password}', '${userDto.birthdate}', '${Date.now()}')`;
+                        VALUES ('${newUserDto.username}', '${newUserDto.password}', '${newUserDto.birthdate}', '${Date.now()}')`;
 
     const ans = await this.client.query(query);
 

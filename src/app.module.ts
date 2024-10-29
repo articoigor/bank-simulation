@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
-import { TransactionModule } from './transaction/transaction.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity } from './user/entities/user.entity';
+import { CacheModule } from './cache/cache.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     UserModule, 
-    TransactionModule,
+    CacheModule,
     TypeOrmModule.forRoot({
       type: 'mssql',
       host: 'omni-app.database.windows.net',
