@@ -9,6 +9,7 @@ import { RedisRepository } from 'src/cache/cache.repository';
 import { SignInResponse } from './dtos/signIn.response';
 import { TransactionDto } from './dtos/transaction.dto';
 import * as jwt from 'jsonwebtoken';
+import { RetrieveUsersResponse } from './dtos/retrieveUsers.response';
 
 
 @Injectable()
@@ -17,6 +18,11 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly cacheRepository: RedisRepository,
   ) {}
+
+  async retrieveUsers(): Promise<RetrieveUsersResponse> {
+    return this.userRepository.getAllUsers();
+  }
+
   async registarNewUser(newUserDto: NewUserDto): Promise<RegisterNewUserResponse> {
     try{
       const existingUser = await this.userRepository.getUserByName(newUserDto.username);

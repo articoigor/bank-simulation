@@ -5,6 +5,7 @@ import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { NewUserDto } from './dtos/newUser.dto';
 import { UserDto } from './dtos/user.dto';
+import { RetrieveUsersResponse } from './dtos/retrieveUsers.response';
 
 @Injectable()
 export class UserRepository {
@@ -12,6 +13,16 @@ export class UserRepository {
     @InjectRepository(UserEntity)
     private readonly client: Repository<UserEntity>,
   ) {}
+  async getAllUsers(): Promise<RetrieveUsersResponse> {
+    const query = `SELECT u.id,
+                          u.username,
+                          u.birthdate,
+                          u.balance
+
+                   FROM Users u`;
+
+    return this.client.query(query);
+  }
     
   async getUserByName(username: string): Promise<UserEntity> {
     const query = `SELECT *

@@ -6,10 +6,17 @@ import { SignInResponse } from './dtos/signIn.response';
 import { UserDto } from './dtos/user.dto';
 import { TransactionDto } from './dtos/transaction.dto';
 import { AuthInterceptor } from 'src/auth.interceptor';
+import { RetrieveUsersResponse } from './dtos/retrieveUsers.response';
 
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get('/users')
+  @UseInterceptors(AuthInterceptor)
+  retrieveUsers(): Promise<RetrieveUsersResponse> {   
+    return this.userService.retrieveUsers();
+  }
 
   @Post('/users/signup')
   registarNewUser(@Body() newUserDto: NewUserDto): Promise<RegisterNewUserResponse> {   
