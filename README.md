@@ -24,7 +24,7 @@ Abaixo segue a lista das rotas adicionadas e suas descrições/contratos:
 Caso opte por utilizar um conteiner pra executar a aplicação, serão necessários os seguintes recursos:
 
 - [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Docker Compose com Docker Desktop](https://docs.docker.com/compose/install/)
 
 ## Instruções
 
@@ -44,4 +44,4 @@ Siga esse passo a passo para conseguir executar o projeto localmente:
    Junto ao email onde disponibilizei o link para esse repositório, há também em anexo o arquivo .env com as variáveis mais sensíveis. Basta adicionar ao diretório recém acessado e prosseguir.
 
 4. **Execute a aplicação**
-  Para esse passo, existem duas possibilidades de execução: a primeira e mais direta utiliza os comandos _npm i_ seguido de _npm run start_. A segunda é baseada em Docker e já deixei uma configuração simples com um Dockerfile e yml do Docker Compose preparados para execução, bastando utilizar o comando _docker-compose up_ se já tiver garantido ter as aplicações Docker e Docker Compose instaladas na máquina.
+  Para esse passo, existem duas possibilidades de execução: a primeira e mais direta utiliza os comandos _npm i_ seguido de _npm run start_. A segunda é baseada em Docker e já deixei uma configuração simples com um Dockerfile e docker-compose.yml preparados para execução, bastando utilizar o comando _docker-compose up_ se já tiver garantido ter as aplicações Docker e Docker Compose/Desktop instaladas e preparados na máquina.
