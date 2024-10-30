@@ -10,6 +10,7 @@ import { SignInResponse } from './dtos/signIn.response';
 import { TransactionDto } from './dtos/transaction.dto';
 import * as jwt from 'jsonwebtoken';
 import { RetrieveUsersResponse } from './dtos/retrieveUsers.response';
+import { UserUpdateDto } from './dtos/userUpdate.dto';
 
 
 @Injectable()
@@ -79,6 +80,16 @@ export class UserService {
     await this.userRepository.updateUser(source);
     
     await this.userRepository.updateUser(target);
+
+    return null;
+  }
+
+  async updateUserBalance(userUpdateDto: UserUpdateDto): Promise<any>{
+    const source = await this.userRepository.getUserById(userUpdateDto.id);
+
+    source.balance = userUpdateDto.newBalance;
+
+    await this.userRepository.updateUser(source);
 
     return null;
   }

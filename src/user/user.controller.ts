@@ -7,6 +7,7 @@ import { UserDto } from './dtos/user.dto';
 import { TransactionDto } from './dtos/transaction.dto';
 import { AuthInterceptor } from 'src/auth.interceptor';
 import { RetrieveUsersResponse } from './dtos/retrieveUsers.response';
+import { UserUpdateDto } from './dtos/userUpdate.dto';
 
 @Controller()
 export class UserController {
@@ -16,6 +17,13 @@ export class UserController {
   @UseInterceptors(AuthInterceptor)
   retrieveUsers(): Promise<RetrieveUsersResponse> {   
     return this.userService.retrieveUsers();
+  }
+
+  @Post('/users/updateBalance')
+  @HttpCode(204)
+  @UseInterceptors(AuthInterceptor)
+  updateUserBalance(@Body() userUpdateDto: UserUpdateDto): any {   
+    return this.userService.updateUserBalance(userUpdateDto);
   }
 
   @Post('/users/signup')
