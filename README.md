@@ -1,10 +1,10 @@
 # Omni Saúde App - Sistema de Transação Financeira
 
-## Overview
+## Resumo
 
 O projeto foi construído baseado nos contratos e descrição disponibilizados no repositório _omnipharma/omni_technical_challenge_. Para a stack, utilizei o framework Nest.js para as APIs, uma instância de SQL Server/Database hospedados na Azure utilizando o tier gratuito, o Redis para armazenamento e recuperação de tokens de acesso para validação de sessão de usuários além de construir alguns testes unitários mais simples e disponibilizar uma imagem docker para execução através do _Docker Compose_.
 
-## Routes
+## Detalhes das Rotas
 
 Abaixo segue a lista das rotas adicionadas e suas descrições/contratos:
 
@@ -17,7 +17,7 @@ Abaixo segue a lista das rotas adicionadas e suas descrições/contratos:
 | POST  | `/users/balance`      | Atualiza o saldo de um usuário.                    | `{ "id": "1", "newBalance": 500 }`          | `No content`  |
 | POST   | `/transfer`   | Processa a transferência de saldo entre usuários.         | `{ "fromId": "1", "toId": "2", "amount": 50 }` | `No content` |
 
-*OBS: Apesar de divergente da documentação, optei por adicionar uma rota update para que fosse possível atualizar o saldo (balance) de um usuário cadastrado dado que não seria possível alterar esse valor senão através da rota transfer, não refletindo uma funcionalidade real*
+*OBS: Apesar de divergente da documentação, optei por adicionar uma rota update para que fosse possível atualizar o saldo (balance) de um usuário cadastrado. Isso pois pelas definições dadas, esse dado não teria como ser alterado senão pela rota _/transfer_, logo, não simularia de fato operações financeiras com dados variáveis.*
 
 ## Requerimentos
 
