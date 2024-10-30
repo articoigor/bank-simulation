@@ -5,7 +5,7 @@ import { RegisterNewUserResponse } from './dtos/registerNewUser.response';
 import { SignInResponse } from './dtos/signIn.response';
 import { UserDto } from './dtos/user.dto';
 import { TransactionDto } from './dtos/transaction.dto';
-import { AuthInterceptor } from 'src/auth.interceptor';
+import { AuthInterceptor } from '../auth.interceptor';
 import { RetrieveUsersResponse } from './dtos/retrieveUsers.response';
 import { UserUpdateDto } from './dtos/userUpdate.dto';
 
