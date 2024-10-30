@@ -1,41 +1,47 @@
-# Project Title
+# Omni Saúde App - Sistema de Transação Financeira
 
 ## Overview
 
-*This section will provide a brief overview of the project. You can elaborate later on your technology decisions and the overall context of the project.*
+O projeto foi construído baseado nos contratos e descrição disponibilizados no repositório _omnipharma/omni_technical_challenge_. Para a stack, utilizei o framework Nest.js para as APIs, uma instância de SQL Server/Database hospedados na Azure utilizando o tier gratuito, o Redis para armazenamento e recuperação de tokens de acesso para validação de sessão de usuários além de construir alguns testes unitários mais simples e disponibilizar uma imagem docker para execução através do _Docker Compose_.
 
 ## Routes
 
-Below is a list of all the available routes in the application along with their descriptions:
+Abaixo segue a lista das rotas adicionadas e suas descrições/contratos:
 
-### User Routes
 
-| Method | Endpoint              | Description                                  |
-|--------|-----------------------|----------------------------------------------|
-| POST   | `/users/register`     | Register a new user.                         |
-| POST   | `/users/signin`       | Sign in an existing user.                    |
-| GET    | `/users`              | Retrieve a list of all users.                |
-| PATCH  | `/users/balance`      | Update a user's balance.                     |
-| POST   | `/users/transaction`   | Process a transaction between users.         |
+| Verbo | Endpoint              | Descrição                                  | Expected Params                                | Expected Result                     |
+|--------|-----------------------|----------------------------------------------|------------------------------------------------|-------------------------------------|
+| POST   | `/users/signup`     | Cadastrar novo usuário.                         | `{ "username": "admin", "password": "123", "birthdate": "14/01/1999" }` | `{ "id": 1 }` |
+| POST   | `/users/signin`       | Logar um usuário já criado.                    | `{ "username": "admin", "password": "123" }` | `{ "token": "valid-jwt-token", "expiresIn": "2024-10-30T03:58:18.234Z" }` |
+| GET    | `/users`              | Recupera a lista de usuários cadastrados.               | `{ }`                                        | `[ { "id": 1, "username": "admin", birthdate: "14/01/1999", balance: 100 }, ... ]` |
+| POST  | `/users/balance`      | Atualiza o saldo de um usuário.                    | `{ "id": "1", "newBalance": 500 }`          | `No content`  |
+| POST   | `/transfer`   | Processa a transferência de saldo entre usuários.         | `{ "fromId": "1", "toId": "2", "amount": 50 }` | `No content` |
 
-### Additional Routes
+*OBS: Apesar de divergente da documentação, optei por adicionar uma rota update para que fosse possível atualizar o saldo (balance) de um usuário cadastrado dado que não seria possível alterar esse valor senão através da rota transfer, não refletindo uma funcionalidade real*
 
-*Add more routes as necessary, following the same structure.*
+## Requerimentos
 
-## Requirements
-
-To run this project, you'll need to install the following software:
+Caso opte por utilizar um conteiner pra executar a aplicação, serão necessários os seguintes recursos:
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
-Ensure you have these installed before proceeding with the steps below.
+## Instruções
 
-## Instructions
+Siga esse passo a passo para conseguir executar o projeto localmente:
 
-Follow these steps to set up and run the project on your local machine:
-
-1. **Clone the Repository**  
-   Clone the repository to your local machine using the following command:
+1. **Clone o repositório**  
+   Clone o repositório para a sua máquina usando:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/articoigor/bank-simulation
+
+2. **Acesse o diretório**  
+   Acesse o diretório criado executando o comando:
+   ```bash
+   cd bank-simulation
+
+3. **Adicione o arquivo .env**
+   Junto ao email onde disponibilizei o link para esse repositório, há também em anexo o arquivo .env com as variáveis mais sensíveis. Basta adicionar ao diretório recém acessado e prosseguir.
+
+4. **Execute a aplicação**
+  Para esse passo, existem duas possibilidades de execução: a primeira e mais direta utiliza os comandos _npm i_ seguido de _npm run start_. A segunda é baseada em Docker e já deixei uma configuração simples com um Dockerfile e yml do Docker Compose preparados para execução, bastando utilizar o comando _docker-compose up_ se já tiver garantido ter as aplicações Docker e Docker Compose instaladas na máquina.
