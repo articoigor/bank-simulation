@@ -26,7 +26,7 @@ export class UserRepository {
   async getUserByName(username: string): Promise<UserEntity> {
     const query = `SELECT *
                    FROM Users u 
-                   WHERE u.username = '${username}'`;
+                   WHERE u.username = '${username.trim()}'`;
 
     const ans = await this.client.query(query);
 
@@ -45,7 +45,7 @@ export class UserRepository {
 
   async insertUser(newUserDto: NewUserDto): Promise<UserEntity> {
     const query = `INSERT INTO Users (username, password, birthdate, balance, created_at)
-                        VALUES ('${newUserDto.username}', '${newUserDto.password}', '${newUserDto.birthdate}', 100, '${Date.now()}')`;
+                        VALUES ('${newUserDto.username.trim()}', '${newUserDto.password}', '${newUserDto.birthdate}', 100, '${Date.now()}')`;
 
     const ans = await this.client.query(query);
 
