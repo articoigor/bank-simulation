@@ -22,7 +22,6 @@ import { CacheModule } from './cache/cache.module';
         trustServerCertificate: true,       
       },
       entities: [UserEntity],
-      synchronize: true, 
     }),
   ],
 })

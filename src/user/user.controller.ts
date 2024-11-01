@@ -19,7 +19,7 @@ export class UserController {
     return this.userService.retrieveUsers();
   }
 
-  @Post('/users/updateBalance')
+  @Post('/users/update-balance')
   @HttpCode(204)
   @UseInterceptors(AuthInterceptor)
   updateUserBalance(@Body() userUpdateDto: UserUpdateDto): any {   

@@ -71,6 +71,12 @@ export class UserService {
 
     const target = await this.userRepository.getUserById(transactionDto.toId);
 
+    if(!source) throw new BadRequestException('O usuário origem da transação não foi encontrado.');
+
+    if(!target) throw new BadRequestException('O usuário destino da transação não foi encontrado.');
+
+    if(source.id == target.id) throw new BadRequestException('Não é possível realizar a transferência para o próprio usuário.');
+
     source.balance -= transactionDto.amount;
 
     if(source.balance < 0) throw new BadRequestException('Não há saldo suficiente na conta origem para realizar a transação.');

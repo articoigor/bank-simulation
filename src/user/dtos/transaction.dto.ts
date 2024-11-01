@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, isNumber, IsNumber, isNumberString, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, isNumber, IsNumber, isNumberString, IsPositive, IsString } from 'class-validator';
 
 export class TransactionDto {
     @IsNotEmpty({ message: 'O campo fromId (source) é obrigatório.' })
@@ -11,6 +11,7 @@ export class TransactionDto {
 
     @IsNotEmpty({ message: 'O campo amount é obrigatório.' })
     @IsNumber({}, { message: 'O campo amount é do tipo Number.' })
+    @IsPositive({ message: 'O campo amount deve ser maior do que zero.' })
     amount: number;
 
     constructor(fromId: string, toId: string, amount: number){
